@@ -20,7 +20,25 @@
     </main>
 
     <script>
-        // Load the saved itinerary from localStorage when the page loads
+        // Predefined itinerary data
+        const predefinedItinerary = [
+            { text: "Flight SFO --> NYC", day: 1 },
+            { text: "Hotel Check-In", day: 1 },
+            { text: "Dinner", day: 1 },
+            { text: "Breakfast", day: 2 },
+            { text: "Visit the Statue of Liberty", day: 2 },
+            { text: "Visit the 9/11 Memorial", day: 2 },
+            { text: "Anniversary Date Night", day: 2 },
+            { text: "Breakfast", day: 3 },
+            { text: "Explore Central Park", day: 3 },
+            { text: "Walk Fifth Avenue", day: 3 },
+            { text: "RockeFeller", day: 3 },
+            { text: "The Edge Lookout", day: 2 },
+            { text: "Dinner & Times Square", day: 3 },
+            { text: "Visit the 9/11 Memorial", day: 3 }
+        ];
+
+        // Load the saved itinerary from localStorage or predefined data when the page loads
         document.addEventListener('DOMContentLoaded', loadItinerary);
 
         document.getElementById('addForm').addEventListener('submit', function(e) {
@@ -77,13 +95,20 @@
         // Function to save the itinerary to localStorage
         function saveItinerary(item) {
             let itinerary = JSON.parse(localStorage.getItem('itinerary')) || [];
-            itinerary.push(item);
+
+            // Combine predefined data with existing items
+            itinerary = [...predefinedItinerary, ...itinerary, item];
+
+            // Remove duplicates while maintaining order
+            itinerary = Array.from(new Map(itinerary.map(item => [item.text, item])).values());
+
             localStorage.setItem('itinerary', JSON.stringify(itinerary));
         }
 
-        // Load the saved itinerary items from localStorage
+        // Load the saved itinerary items from localStorage or use predefined items
         function loadItinerary() {
-            let itinerary = JSON.parse(localStorage.getItem('itinerary')) || [];
+            let itinerary = JSON.parse(localStorage.getItem('itinerary')) || predefinedItinerary;
+
             // Sort itinerary by day before adding to the list
             itinerary.sort((a, b) => a.day - b.day);
             itinerary.forEach(item => addItemToList(item));
