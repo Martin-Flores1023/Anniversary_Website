@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYC Itinerary</title>
+    <link rel="stylesheet" href="itin_style.css">
+</head>
+<body>
+    <main class="container">
+        <h1>NYC Anniversary Vacation Itinerary</h1>
+
+        <form id="addForm">
+            <input type="text" id="itemInput" placeholder="Add an item to your itinerary" required>
+            <input type="number" id="dayInput" min="1" placeholder="Day #" required>
+            <button type="submit">Add Item</button>
+        </form>
+
+        <div id="itineraryContainer"></div>
+    </main>
+
+    <script>
+        // Load the saved itinerary from localStorage when the page loads
+        document.addEventListener('DOMContentLoaded', loadItinerary);
+
+        document.getElementById('addForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const itemText = document.getElementById('itemInput').value;
+            const dayValue = document.getElementById('dayInput').value;
+
+            if (itemText && dayValue) {
+                const item = {
+                    text: itemText,
+                    day: parseInt(dayValue) // Store day as a number
+                };
+
+                // Add item to the itinerary list and save it
+                addItemToList(item);
+                saveItinerary(item);
+
+                // Reset form inputs
+                document.getElementById('itemInput').value = '';
+                document.getElementById('dayInput').value = '';
+            }
+        });
+
+        // Function to add item to the list
+        function addItemToList(item) {
+            const itineraryContainer = document.getElementById('itineraryContainer');
+            let daySection = document.getElementById(`day${item.day}`);
+
+            // Create a new section for the day if it doesn't exist
+            if (!daySection) {
+                daySection = document.createElement('div');
+                daySection.id = `day${item.day}`;
+                daySection.innerHTML = `<h2>Day ${item.day}</h2>`;
+                itineraryContainer.appendChild(daySection);
+            }
+
+            const li = document.createElement('li');
+            li.textContent = item.text;
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = "Delete";
+            removeButton.className = "delete-btn"; // Add class for styling
+            removeButton.onclick = function() {
+                li.remove();
+                removeItineraryItem(item);
+            };
+
+            li.className = "itinerary-item"; // Add class for styling
+            li.appendChild(removeButton);
+            daySection.appendChild(li);
+        }
+
+        // Function to save the itinerary to localStorage
+        function saveItinerary(item) {
+            let itinerary = JSON.parse(localStorage.getItem('itinerary')) || [];
+            itinerary.push(item);
+            localStorage.setItem('itinerary', JSON.stringify(itinerary));
+        }
+
+        // Load the saved itinerary items from localStorage
+        function loadItinerary() {
+            let itinerary = JSON.parse(localStorage.getItem('itinerary')) || [];
+            // Sort itinerary by day before adding to the list
+            itinerary.sort((a, b) => a.day - b.day);
+            itinerary.forEach(item => addItemToList(item));
+        }
+
+        // Function to remove an item from localStorage when deleted
+        function removeItineraryItem(itemToRemove) {
+            let itinerary = JSON.parse(localStorage.getItem('itinerary')) || [];
+            itinerary = itinerary.filter(item => item.text !== itemToRemove.text || item.day !== itemToRemove.day);
+            localStorage.setItem('itinerary', JSON.stringify(itinerary));
+        }
+    </script>
+</body>
+</html>
