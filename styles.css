@@ -62,7 +62,6 @@ button {
 button:hover {
     opacity: 0.9;
     background-color: #dc3545;
-   
 }
 
 /* Itinerary List */
@@ -169,7 +168,7 @@ form button:hover {
     }
 
     form input[type="text"],
-    form input[type="number"] { /* Changed to number for Day input */
+    form input[type="number"] {
         margin-right: 10px;
         margin-bottom: 0;
     }
@@ -178,4 +177,44 @@ form button:hover {
         width: auto;
         flex-shrink: 0;
     }
+}
+
+/* Modal Styles */
+.modal {
+    display: none; 
+    position: fixed; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: rgba(0, 0, 0, 1);
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.modal-content button {
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+/* Modal button styles */
+.confirm-btn, .cancel-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.cancel-btn {
+    background-color: #dc3545; /* Red for cancel */
 }
